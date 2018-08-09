@@ -1,0 +1,141 @@
+<resources>
+    <string name="app_name">Treatment Reminder</string>
+
+    <!--no_data__layout_Message-->
+    <string name="no_data">No treatment found</string>
+    <string name="no_data_v2">add it from button below</string>
+
+
+    <!--Comming_fragment-->
+    <string name="Your_Home">Home Location Need to add Loaction</string>
+    <string name="loaction_pref" translatable="false">pref_loaction</string>
+    <string name="need_location_permission_message">Need Permission</string>
+    <string name="display_location_benfit">This Will Help You If You Forget To Take medicine With You</string>
+    <string name="enable_Geo">Enable Reminder By Location</string>
+    <string name="Edit_loaction">Change Location</string>
+    <string name="Loaction_Changed">Location Changed Successfully</string>
+    <string name="Location_Title">Loaction :</string>
+
+
+    <!--add_Treatment-->
+    <string name="text_add_treatment_name">Treatment Name :</string>
+    <string name="times_title">Times :</string>
+    <string name="display_times">chooes the dates and hours you will take the treatment</string>
+    <string name="this_plus">More sections</string>
+    <string name="close">Cancel</string>
+    <string name="add">Add</string>
+    <string name="days">Days</string>
+    <string name="hours">Hours</string>
+    <string name="add_reminder">Add Treatment</string>
+    <string name="Sun">Sun</string>
+    <string name="Hour">00:00 Pm</string>
+    <item name="Sun" type="id">Sun</item>
+
+
+    <!--Add Reminder-->
+    <string name="no_cardetails">Click on the button below to begin creating your reminder!</string>
+    <string name="title_activity_add_reminder">Add Reminder</string>
+    <string name="title_activity_edit_reminder">Edit Reminder</string>
+    <string name="title_activity_licenses">Licenses</string>
+
+    <string name="details">Details</string>
+    <string name="date">Date</string>
+    <string name="time">Time</string>
+    <string name="repeat">Repeat</string>
+    <string name="repeat_off">Off</string>
+    <string name="repeat_on">ON</string>
+    <string name="repeat_no">Repetition Interval </string>
+    <string name="repeat_type">Type of Repetitions</string>
+
+    <string name="action_discard_reminder">Discard Reminder</string>
+    <string name="action_save_reminder">Save Reminder</string>
+
+    <string name="editor_activity_title_new_reminder">Add Reminder Details</string>
+    <string name="editor_activity_title_edit_reminder">Edit Reminder</string>
+    <string name="unsaved_changes_dialog_msg">Discard your changes and quit editing?</string>
+    <string name="discard">Discard</string>
+
+    <string name="keep_editing">Keep Editing</string>
+    <string name="delete_dialog_msg">Delete this Reminder?</string>
+
+    <string name="delete">Delete</string>
+
+    <string name="cancel">Cancel</string>
+    <string name="editor_delete_reminder_successful">Reminder deleted</string>
+
+    <string name="editor_delete_reminder_failed">Error with deleting reminder</string>
+
+    <string name="editor_insert_reminder_successful">Reminder saved</string>
+
+    <string name="editor_insert_reminder_failed">Error with saving reminder</string>
+
+    <string name="editor_update_reminder_successful">Reminder updated</string>
+
+    <string name="editor_update_reminder_failed">Error with updating reminder</string>
+
+    <string name="the_Treatment_added">Treatment Added Succefully</string>
+    <string name="faild_to_add">Failed To Add Treatment</string>
+    <string name="Main_Screen_title">Treatments</string>
+    <string name="No_Repetation">No Repetation Set</string>
+    <string name="Repetaion">Every</string>
+    <string name="dialog_title">Set Treatmen Reminder Title</string>
+    <string name="ok_dialog">ok</string>
+    <string name="Cancel_dialog">cancel</string>
+    <string name="No_Date_Time">No Date and Time has Set</string>
+    <string name="Empty_title_text">Treatment Name Cann\'t be Blank</string>
+    <string name="Tretment">Treatment</string>
+    <string name="Repeat_Type">Day</string>
+    <string name="Get_Number">Get Numbrer</string>
+
+    <string name="Minute">Minute</string>
+    <string name="Hour_re">Hour</string>
+    <string name="Day">Day</string>
+    <string name="Week">Week</string>
+    <string name="Month">Month</string>
+    <string name="Types_Repetaion">a</string>
+    <string name="Select_Type">Select Type</string>
+    <string name="Reminder_Truned_off">Reminder Turned Off</string>
+    <string name="Reminder_Truned_on">Reminder Turned On</string>
+    <string name="desciption">Description</string>
+    <string name="Note">Note</string>
+    <string name="Get_Note">write your notes</string>
+    <string name="Default_note">Don\'t Forget to take the treatment</string>
+    <string name="Notes_Updated">Notes Updated Successfully</string>
+    <string name="Success_added">Successful Updates</string>
+    <string name="Treatment_Reminder_deleted">Treatment Reminder deleted</string>
+
+    <string-array name="Types_Repetaion">
+        <item>@string/Minute</item>
+        <item>@string/Hour_re</item>
+        <item>@string/Day</item>
+        <item>@string/Week</item>
+        <item>@string/Month</item>
+    </string-array>
+    <string name="appwidget_text">EXAMPLE</string>
+    <string name="add_widget">Add widget</string>
+    <string name="reminders">Your Treatment Reminders</string>
+    <string name="main_notification_channel_name">Primary</string>
+    <string name="Wellcome">Wellcome</string>
+    <string name="yourTreament">Your Treatment</string>
+    <string name="treatment_teat">Treatment</string>
+    <string name="Dates">dates</string>
+    <string name="alarm_working">Alarm on off</string>
+    <string name="Types_of_repetation">Types of Repetation</string>
+    <string name="repetation_interval">repetation Interval</string>
+    <string name="note_de">Your Notes</string>
+    <string name="dates_des">Your Dates</string>
+    <string name="time_des">Your Times</string>
+    <string name="repate_mode">Repate Mode</string>
+    <string name="no_Data">No Treatment Found</string>
+    <string name="privacy">http://www.google.com/policies/privacy</string>
+
+
+    <string name="interstitial_ad_unit_id" translatable="false">ca-app-pub-3940256099942544/6300978111</string>
+    <string name="banner_ad_unit_id">ca-app-pub-3940256099942544/6300978111</string>
+    <string name="Loaction">Loaction</string>
+    <string name="add_loaction">Add Location</string>
+    <string name="donot_forget">Don\'t forget To Take treatment with you</string>
+    <string name="donot_forget_take">you are leaving home  Don\'t Forget To Take The treatment with you to take it in time</string>
+    <string name="Google">Google Licenes</string>
+
+</resources>

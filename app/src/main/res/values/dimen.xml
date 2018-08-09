@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <!--For Splash-Screen Layout-->
+    <dimen name="Pic_width">250dp</dimen>
+    <dimen name="progressBar_margin_bttom">20dp</dimen>
+    <!--For Main_List_Items-->
+    <dimen name="image_height">24dp</dimen>
+    <dimen name="image_width">24dp</dimen>
+    <dimen name="image_margin">16dp</dimen>
+
+    <!--No data Layout-->
+    <dimen name="image_height_no_data">75dp</dimen>
+    <dimen name="image_width_no_data">75dp</dimen>
+    <dimen name="text_no_data">16dp</dimen>
+
+
+    <!--Margin Bettwen Text-->
+    <dimen name="text_marign">4dp</dimen>
+
+    <!--The Main acticity-->
+
+
+
+</resources>
