@@ -1,8 +1,10 @@
 package com.marionageh.treatmentreminder;
 
+import android.arch.lifecycle.ViewModelProviders;
 import android.content.Intent;
 import android.os.Handler;
 import android.os.Parcelable;
+import android.support.annotation.Nullable;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.animation.Animation;
@@ -11,10 +13,13 @@ import android.widget.ImageView;
 import android.widget.ProgressBar;
 
 import com.marionageh.treatmentreminder.customClasses.CustomAsyanTask;
+import com.marionageh.treatmentreminder.database.TreatmentViewModel;
 import com.marionageh.treatmentreminder.models.Treatment;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Observable;
+import java.util.Observer;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -28,6 +33,11 @@ public class splash_screen extends AppCompatActivity implements CustomAsyanTask.
 
     private final int SECOND_FRO_LUNCH = 2;
     long realsecond = SECOND_FRO_LUNCH * 1000;
+
+
+    private TreatmentViewModel viewModel;
+    android.arch.lifecycle.Observer<List<Treatment>> listObservable;
+
 
     /*
     in this activity no need for saving instant state
@@ -46,7 +56,29 @@ public class splash_screen extends AppCompatActivity implements CustomAsyanTask.
     }
 
     private void getData() {
-        new CustomAsyanTask(this, this).execute();
+        viewModel = ViewModelProviders.of(this).get(TreatmentViewModel.class);
+        listObservable=new android.arch.lifecycle.Observer<List<Treatment>>() {
+            @Override
+            public void onChanged(@Nullable final List<Treatment> treatmentList) {
+                //Will Start the new activity after 2 second fro animation
+                Handler handler = new Handler();
+                handler.postDelayed(new Runnable() {
+                    @Override
+                    public void run() {
+                        Intent intent = new Intent(splash_screen.this, MainScreen.class);
+                        //send the list to activity
+                        intent.putExtra(MainScreen.Data_FROM_DATABASE, (ArrayList<? extends Parcelable>)  treatmentList);
+                        startActivity(intent);
+                        overridePendingTransition(R.anim.fade_in, R.anim.fade_out);
+                        finish();
+                    }
+                }, realsecond);
+
+            }
+        };
+        viewModel.getTreatmentlivedata().observe(this,listObservable);
+
+    //    new CustomAsyanTask(this, this).execute();
     }
 
     private void animateScreen() {
@@ -58,19 +90,12 @@ public class splash_screen extends AppCompatActivity implements CustomAsyanTask.
 
     @Override
     public void onListReceived(final List<Treatment> treatmentList) {
-        //Will Start the new activity after 2 second fro animation
-        Handler handler = new Handler();
-        handler.postDelayed(new Runnable() {
-            @Override
-            public void run() {
-                Intent intent = new Intent(splash_screen.this, MainScreen.class);
-                //send the list to activity
-                intent.putExtra(MainScreen.Data_FROM_DATABASE, (ArrayList<? extends Parcelable>)  treatmentList);
-                startActivity(intent);
-                overridePendingTransition(R.anim.fade_in, R.anim.fade_out);
-                finish();
-            }
-        }, realsecond);
 
+    }
+
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        viewModel.getTreatmentlivedata().removeObserver(listObservable);
     }
 }

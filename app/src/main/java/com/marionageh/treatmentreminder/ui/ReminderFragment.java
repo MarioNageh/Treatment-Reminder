@@ -3,6 +3,8 @@ package com.marionageh.treatmentreminder.ui;
 import android.Manifest;
 import android.app.Activity;
 import android.app.ActivityOptions;
+import android.arch.lifecycle.Observer;
+import android.arch.lifecycle.ViewModelProviders;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
@@ -49,6 +51,7 @@ import com.marionageh.treatmentreminder.R;
 import com.marionageh.treatmentreminder.adapters.TreatmentAdapter;
 import com.marionageh.treatmentreminder.customClasses.DeleteAsyanTask;
 import com.marionageh.treatmentreminder.customClasses.SavingAsyncTask;
+import com.marionageh.treatmentreminder.database.TreatmentViewModel;
 import com.marionageh.treatmentreminder.models.Treatment;
 import com.marionageh.treatmentreminder.widget.TreatmentWidgetService;
 
@@ -60,7 +63,7 @@ import butterknife.ButterKnife;
 
 import static android.content.Context.MODE_PRIVATE;
 
-public class ReminderFragment extends Fragment implements TreatmentAdapter.ListItemClick, DeleteAsyanTask.CustomReminder, GoogleApiClient.ConnectionCallbacks,
+public class ReminderFragment extends Fragment implements TreatmentAdapter.ListItemClick, com.marionageh.treatmentreminder.LiveDataCustomsClass.DeleteAsyanTask.CustomReminder, GoogleApiClient.ConnectionCallbacks,
         GoogleApiClient.OnConnectionFailedListener {
     //Views
     @BindView(R.id.recycler_view_re_fr)
@@ -104,6 +107,10 @@ public class ReminderFragment extends Fragment implements TreatmentAdapter.ListI
     private static final int PLACE_PICKER_REQUEST_edit = 2;
 
 
+    //
+    private TreatmentViewModel viewModel;
+
+
     //Adapteres
     public TreatmentAdapter treatmentAdapter = new TreatmentAdapter(null, this, null);
 
@@ -112,7 +119,7 @@ public class ReminderFragment extends Fragment implements TreatmentAdapter.ListI
     public static final String GET_EXTRA_LIST = "LISt";
 
     //Values
-    List<Treatment> treatmentList;
+ public static   List<Treatment> treatmentList;
 
     //For Saving Instant State
     public static final String ON_SAVE_INSTANT_STATE_TRETMENT_LIST = "LISt_trat_Ment";
@@ -130,13 +137,16 @@ public class ReminderFragment extends Fragment implements TreatmentAdapter.ListI
         //get init shared pre
         editor = getActivity().getPreferences(MODE_PRIVATE).edit();
 
+        //Get Data From Live Data
+        viewModel = ViewModelProviders.of(this).get(TreatmentViewModel.class);
+
 
         //Get DATA Via Bundel && No need to check size of the list
         if (getArguments() == null && savedInstanceState == null) return null;
-        treatmentList = getArguments().getParcelableArrayList(GET_EXTRA_LIST);
+        ////Live   treatmentList = getArguments().getParcelableArrayList(GET_EXTRA_LIST);
         ///For Saving INstntState
         if (savedInstanceState != null) {
-            treatmentList = savedInstanceState.getParcelableArrayList(ON_SAVE_INSTANT_STATE_TRETMENT_LIST);
+            //Live      treatmentList = savedInstanceState.getParcelableArrayList(ON_SAVE_INSTANT_STATE_TRETMENT_LIST);
             isArrowDown = savedInstanceState.getBoolean(IS_ARROW_Down_KEY);
             if (isArrowDown) {
                 ArrowUp();
@@ -148,6 +158,20 @@ public class ReminderFragment extends Fragment implements TreatmentAdapter.ListI
         treatmentAdapter = new TreatmentAdapter(treatmentList, this, getContext());
         recyclerView.setHasFixedSize(true);
         recyclerView.setAdapter(treatmentAdapter);
+
+
+        viewModel.getTreatmentlivedata().observe(ReminderFragment.this, new Observer<List<Treatment>>() {
+            @Override
+            public void onChanged(@Nullable List<Treatment> treatmentList) {
+                TreatmentWidgetService.startActionGetUpdate(getContext());
+
+                ReminderFragment.treatmentList = treatmentList;
+                treatmentAdapter.Swapadapter(treatmentList);
+
+            }
+        });
+
+
         new ItemTouchHelper(new ItemTouchHelper.SimpleCallback(0, ItemTouchHelper.LEFT | ItemTouchHelper.RIGHT) {
             @Override
             public boolean onMove(RecyclerView recyclerView, RecyclerView.ViewHolder viewHolder, RecyclerView.ViewHolder target) {
@@ -158,8 +182,9 @@ public class ReminderFragment extends Fragment implements TreatmentAdapter.ListI
             public void onSwiped(RecyclerView.ViewHolder viewHolder, int direction) {
                 //Stop This Reminder
                 new AlarmAdapter().deleteAlarm(getContext(), (int) viewHolder.itemView.getTag());
+                viewModel.deleteTreatment((int) viewHolder.itemView.getTag(),ReminderFragment.this);
+                //       new DeleteAsyanTask(getContext(), (int) viewHolder.itemView.getTag(), ReminderFragment.this).execute();
 
-                new DeleteAsyanTask(getContext(), (int) viewHolder.itemView.getTag(), ReminderFragment.this).execute();
 
             }
         }).attachToRecyclerView(recyclerView);
@@ -232,7 +257,7 @@ public class ReminderFragment extends Fragment implements TreatmentAdapter.ListI
         //This for inflate layout no data
         if (treatmentList.size() == 0) {
             //UnRigister ALl Geo Fancess
-             mGeofencing.unRegisterAllGeofences();
+            mGeofencing.unRegisterAllGeofences();
             ((MainScreen) getActivity()).initFragments(treatmentList);
         }
     }

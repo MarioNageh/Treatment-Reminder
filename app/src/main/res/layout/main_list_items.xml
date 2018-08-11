@@ -20,7 +20,7 @@
             android:orientation="vertical">
 
             <ImageView
-                android:contentDescription="@string/treatment_teat"
+                android:contentDescription="@null"
                 android:layout_width="@dimen/image_width"
                 android:layout_height="@dimen/image_width"
                 android:layout_marginTop="@dimen/image_margin"
@@ -30,7 +30,7 @@
 
 
             <ImageView
-                android:contentDescription="@string/Dates"
+                android:contentDescription="@null"
 
                 android:layout_width="@dimen/image_width"
                 android:layout_height="@dimen/image_width"

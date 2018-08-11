@@ -3,6 +3,7 @@ package com.marionageh.treatmentreminder;
 
 import android.app.AlertDialog;
 import android.app.LoaderManager;
+import android.arch.lifecycle.ViewModelProviders;
 import android.content.ContentValues;
 import android.content.CursorLoader;
 import android.content.DialogInterface;
@@ -44,6 +45,7 @@ import com.marionageh.treatmentreminder.Alarams.AlarmAdapter;
 import com.marionageh.treatmentreminder.customClasses.DeleteAsyanTask;
 import com.marionageh.treatmentreminder.customClasses.ModeRepetation;
 import com.marionageh.treatmentreminder.customClasses.UpdateAsyanTask;
+import com.marionageh.treatmentreminder.database.TreatmentViewModel;
 import com.marionageh.treatmentreminder.models.Treatment;
 import com.marionageh.treatmentreminder.ui.ReminderFragment;
 import com.marionageh.treatmentreminder.widget.TreatmentWidgetService;
@@ -58,7 +60,7 @@ import static com.marionageh.treatmentreminder.MainScreen.REMINDER_FRAGMENT_TAG;
 import static com.marionageh.treatmentreminder.MainScreen.fa;
 
 public class AddTreatment extends AppCompatActivity implements
-        TimePickerDialog.OnTimeSetListener, DatePickerDialog.OnDateSetListener, UpdateAsyanTask.CustomReminder, DeleteAsyanTask.CustomReminder {
+        TimePickerDialog.OnTimeSetListener, DatePickerDialog.OnDateSetListener, com.marionageh.treatmentreminder.LiveDataCustomsClass.UpdateAsyanTask.CustomReminder, com.marionageh.treatmentreminder.LiveDataCustomsClass.DeleteAsyanTask.CustomReminder {
 
     //For Comming data via bundel
     public static final String TREAMENT_SENDER = "TREATMENT";
@@ -128,6 +130,13 @@ public class AddTreatment extends AppCompatActivity implements
     public static final long milMonth = 2592000000L;
 
 
+
+  //  private TreatmentViewModel viewModel;
+
+    private TreatmentViewModel viewModel;
+
+
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -140,6 +149,8 @@ public class AddTreatment extends AppCompatActivity implements
         } else {
             return;
         }
+
+        viewModel = ViewModelProviders.of(this).get(TreatmentViewModel.class);
 
         PrepareActionBar();
         InitValues();
@@ -357,7 +368,10 @@ public class AddTreatment extends AppCompatActivity implements
         builder.setMessage(R.string.delete_dialog_msg);
         builder.setPositiveButton(R.string.delete, new DialogInterface.OnClickListener() {
             public void onClick(DialogInterface dialog, int id) {
-                new DeleteAsyanTask(AddTreatment.this, treatment.getId(), AddTreatment.this).execute();
+           //     new DeleteAsyanTask(AddTreatment.this, treatment.getId(), AddTreatment.this).execute();
+      viewModel.deleteTreatment(treatment.getId(),AddTreatment.this);
+
+
             }
 
         });
@@ -433,9 +447,9 @@ public class AddTreatment extends AppCompatActivity implements
             treatment.setRepeat_no(mRepeatNo);
             treatment.setRepeat_type(mRepeatType);
             treatment.setActive(mWorking);
-            new UpdateAsyanTask(this, treatment, this).execute();
+          //  new UpdateAsyanTask(this, treatment, this).execute();
 
-
+            viewModel.updateTreatment(treatment,this);
             if (treatment.isActive()) {
                 if (treatment.isRepeat()) {
                     new AlarmAdapter().RepeatAlarm(getApplicationContext(), selectedTimestamp, treatment.getId(), mRepeatTime);

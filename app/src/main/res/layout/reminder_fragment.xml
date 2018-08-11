@@ -64,7 +64,7 @@
                     android:layout_height="wrap_content"
                     android:layout_gravity="center_vertical"
                     android:layout_marginStart="16dp"
-                    android:contentDescription="@string/Loaction"
+                    android:contentDescription="@null"
                     android:src="@drawable/ic_location" />
 
                 <TextView
@@ -168,6 +168,7 @@
 
 
                         <ImageView
+                            android:contentDescription="@string/Edit_loaction"
                             android:focusable="true"
                             android:id="@+id/edit_loacation_frag"
                             android:layout_width="wrap_content"

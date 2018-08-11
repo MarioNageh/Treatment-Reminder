@@ -1,6 +1,8 @@
 package com.marionageh.treatmentreminder;
 
 import android.app.Activity;
+import android.arch.lifecycle.ViewModel;
+import android.arch.lifecycle.ViewModelProviders;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Parcelable;
@@ -21,9 +23,11 @@ import android.widget.FrameLayout;
 
 import com.google.android.gms.ads.AdRequest;
 import com.google.android.gms.ads.AdView;
+import com.marionageh.treatmentreminder.LiveDataCustomsClass.InsertAsyanTask;
 import com.marionageh.treatmentreminder.adapters.TreatmentAdapter;
 import com.marionageh.treatmentreminder.customClasses.CustomAsyanTask;
 import com.marionageh.treatmentreminder.customClasses.SavingAsyncTask;
+import com.marionageh.treatmentreminder.database.TreatmentViewModel;
 import com.marionageh.treatmentreminder.models.Treatment;
 import com.marionageh.treatmentreminder.ui.NoDataFragment;
 import com.marionageh.treatmentreminder.ui.ReminderFragment;
@@ -35,7 +39,7 @@ import java.util.List;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 
-public class MainScreen extends AppCompatActivity implements TreatmentAdapter.ListItemClick, SavingAsyncTask.CustomReminder, CustomAsyanTask.CustomAsyncListener {
+public class MainScreen extends AppCompatActivity implements TreatmentAdapter.ListItemClick, InsertAsyanTask.CustomReminder, CustomAsyanTask.CustomAsyncListener {
 
     //For intent
     public static final String Data_FROM_DATABASE = "DATA";
@@ -53,7 +57,7 @@ public class MainScreen extends AppCompatActivity implements TreatmentAdapter.Li
 
     //Values
     List<Treatment> treatmentList;
-
+    private TreatmentViewModel viewModel;
     //For Treatment add Reminder
     private String reminderTitle = "";
 
@@ -67,7 +71,7 @@ public class MainScreen extends AppCompatActivity implements TreatmentAdapter.Li
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main_screen);
         ButterKnife.bind(this);
-        fa=this;
+        fa = this;
         //Check the intent if not null get data
         Intent intent = getIntent();
         if (intent != null && intent.getExtras() != null) {
@@ -83,7 +87,7 @@ public class MainScreen extends AppCompatActivity implements TreatmentAdapter.Li
         } else {
             initFragments(treatmentList);
         }
-
+        viewModel = ViewModelProviders.of(this).get(TreatmentViewModel.class);
 
     }
 
@@ -102,7 +106,7 @@ public class MainScreen extends AppCompatActivity implements TreatmentAdapter.Li
             fragment.setArguments(bundle);
             FragmentTransaction fragmentTransaction = fM
                     .beginTransaction();
-            fragmentTransaction.setCustomAnimations(R.anim.fade_in,R.anim.fade_out);
+            fragmentTransaction.setCustomAnimations(R.anim.fade_in, R.anim.fade_out);
 
             fragmentTransaction.replace(fragment_cotanier_ms.getId(), fragment, REMINDER_FRAGMENT_TAG).commit();
 
@@ -141,8 +145,8 @@ public class MainScreen extends AppCompatActivity implements TreatmentAdapter.Li
                 }
 
                 reminderTitle = input.getText().toString();
-                Treatment treatment = new Treatment(reminderTitle,getResources().getString(R.string.Default_note), "", "", false, "", "",true);
-                new SavingAsyncTask(MainScreen.this, treatment, MainScreen.this).execute();
+                Treatment treatment = new Treatment(reminderTitle, getResources().getString(R.string.Default_note), "", "", false, "", "", true);
+                viewModel.insertTreatment(treatment, MainScreen.this);
             }
         });
         builder.setNegativeButton(getResources().getString(R.string.Cancel_dialog), new DialogInterface.OnClickListener() {
@@ -175,11 +179,11 @@ public class MainScreen extends AppCompatActivity implements TreatmentAdapter.Li
     }
 
     @Override
-    public void onAddedFinshed(List<Treatment> treatmentList) {
+    public void onInsertFinshed(List<Treatment> treatmentList) {
         //Check if data added or not
-        if (treatmentList.size() > 0) {
+        if (treatmentList.size() == 1) {
             this.treatmentList = treatmentList;
-          //for inflate the fragment that have data
+            //for inflate the fragment that have data
             initFragments(treatmentList);
 
             Snackbar.make(findViewById(R.id.main_coordinator_ms), getResources().getString(R.string.the_Treatment_added), Snackbar.LENGTH_SHORT).show();
@@ -194,13 +198,13 @@ public class MainScreen extends AppCompatActivity implements TreatmentAdapter.Li
             TreatmentWidgetService.startActionGetUpdate(this);
 
 
-        } else {
+        } else if (treatmentList.size() == 0) {
             Snackbar.make(findViewById(R.id.main_coordinator_ms), getResources().getString(R.string.faild_to_add), Snackbar.LENGTH_SHORT).show();
 
         }
     }
 
-    public void UpdateAdapter(List<Treatment> treatmentyList){
+    public void UpdateAdapter(List<Treatment> treatmentyList) {
         ReminderFragment fragment = (ReminderFragment) getSupportFragmentManager().findFragmentByTag(REMINDER_FRAGMENT_TAG);
         // Check if the tab fragment is available
         if (fragment != null) {

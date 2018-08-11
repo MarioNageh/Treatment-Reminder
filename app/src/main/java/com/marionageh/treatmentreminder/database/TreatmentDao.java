@@ -1,5 +1,6 @@
 package com.marionageh.treatmentreminder.database;
 
+import android.arch.lifecycle.LiveData;
 import android.arch.persistence.room.Dao;
 import android.arch.persistence.room.Delete;
 import android.arch.persistence.room.Insert;
@@ -21,6 +22,11 @@ public interface TreatmentDao {
 
     @Query("SELECT * FROM Treatment")
     List<Treatment> getAll();
+
+    @Query("SELECT * FROM Treatment")
+    LiveData<List<Treatment>> getAllLive();
+
+
 
     @Delete
     void delete(Treatment Treatment);
