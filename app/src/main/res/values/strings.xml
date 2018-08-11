@@ -137,5 +137,7 @@
     <string name="donot_forget">Don\'t forget To Take treatment with you</string>
     <string name="donot_forget_take">you are leaving home  Don\'t Forget To Take The treatment with you to take it in time</string>
     <string name="Google">Google Licenes</string>
+    <string name="add_button">Add Reminder</string>
+    <string name="on_off">Trun On Off reminder</string>
 
 </resources>

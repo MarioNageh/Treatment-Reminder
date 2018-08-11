@@ -381,6 +381,7 @@
 
 
     <com.getbase.floatingactionbutton.FloatingActionButton
+        android:contentDescription="@string/on_off"
         android:focusable="true"
         android:id="@+id/fab_turn_no_off"
         android:layout_width="wrap_content"
